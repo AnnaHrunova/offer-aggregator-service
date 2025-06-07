@@ -8,3 +8,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:migrations/db.changelog-master.yaml
+api:
+  v1: api/v1
+logging:
+  pattern:
+    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "

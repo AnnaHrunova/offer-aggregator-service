@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/applications")
+@RequestMapping("${api.v1}/applications")
 @AllArgsConstructor
 public class ApplicationController {
 

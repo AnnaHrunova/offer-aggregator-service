@@ -40,6 +40,9 @@ dependencies {
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
+	implementation("io.micrometer:micrometer-tracing")
+	implementation("io.micrometer:micrometer-tracing-bridge-otel")
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'io.projectreactor:reactor-test'
