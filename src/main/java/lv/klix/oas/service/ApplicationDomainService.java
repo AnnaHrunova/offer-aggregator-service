@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class ApplicationService {
+public class ApplicationDomainService {
 
     private final ApplicationRepository applicationRepository;
 

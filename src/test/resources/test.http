@@ -1,2 +1,2 @@
-### Test endpoint
-POST http://localhost:8080/test
+### Create application
+POST http://localhost:8080/applications
