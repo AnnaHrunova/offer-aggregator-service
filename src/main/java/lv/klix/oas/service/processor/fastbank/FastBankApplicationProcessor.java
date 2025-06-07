@@ -1,13 +1,43 @@
 package lv.klix.oas.service.processor.fastbank;
 
-import lv.klix.oas.service.processor.ApplicationData;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lv.klix.oas.service.processor.ApplicationDTO;
 import lv.klix.oas.service.processor.ApplicationProcessor;
 import lv.klix.oas.service.processor.OfferDTO;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+
+@Service
+@AllArgsConstructor
+@Slf4j
 public class FastBankApplicationProcessor implements ApplicationProcessor {
 
+    private final FastBankClient fastBankClient;
+    private final FastBankOfferMapper fastBankOfferMapper;
+
     @Override
-    public OfferDTO process(ApplicationData request) {
-        return null;
-    }
+    public Mono<OfferDTO> process(ApplicationDTO request) {
+        var fastBankApplicationRequest = new FastBankApplicationRequest();
+        fastBankApplicationRequest.setEmail("test@mail.lv");
+        fastBankApplicationRequest.setPhoneNumber("+37126668899");
+        fastBankApplicationRequest.setAmount(BigDecimal.valueOf(1000));
+        fastBankApplicationRequest.setDependents(1);
+        fastBankApplicationRequest.setAgreeToDataSharing(true);
+        fastBankApplicationRequest.setMonthlyCreditLiabilities(BigDecimal.valueOf(100));
+        fastBankApplicationRequest.setMonthlyIncomeAmount(BigDecimal.valueOf(5000));
+        return fastBankClient.submitApplication(fastBankApplicationRequest)
+                .doOnNext(resp -> log.info("Submitted application: {}", resp))
+                .flatMap(resp ->
+                        fastBankClient.findApplication(resp.getId())
+                                .repeatWhen(flux -> flux.delayElements(Duration.ofSeconds(2)))
+                                .takeUntil(response -> response.getStatus() == FastBankApplicationResponse.Status.PROCESSED)
+                                .doOnNext(response -> log.info("Polling response: {}", response))
+                                .last()
+                )
+                .map(applResp -> fastBankOfferMapper.map(applResp.getOffer()))
+                .doOnError(err -> log.error("Error during application processing: {}", err.getMessage(), err));    }
 }

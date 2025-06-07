@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/applications")
@@ -21,8 +22,9 @@ public class ApplicationController {
 
     @PostMapping
     public Mono<ResponseEntity<OffersResponse>> createApplication() {
-        var offers = applicationAggregatorService.processApplication();
-        return Mono.just(ResponseEntity.ok(new OffersResponse(offers)));
+        return applicationAggregatorService.processApplication()
+                .collect(Collectors.toSet())
+                .map(offers -> ResponseEntity.ok(new OffersResponse(offers)));
     }
 
     @Data

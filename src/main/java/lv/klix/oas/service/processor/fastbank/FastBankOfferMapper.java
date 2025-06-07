@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface FastBankOfferMapper {
 
-    OfferDTO map(FastBankOfferResponse fastBankOfferResponse);
+    OfferDTO map(FastBankApplicationResponse.FastBankOfferResponse fastBankOfferResponse);
 }

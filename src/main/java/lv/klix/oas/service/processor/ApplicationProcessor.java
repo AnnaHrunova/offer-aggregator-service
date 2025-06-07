@@ -1,6 +1,8 @@
 package lv.klix.oas.service.processor;
 
+import reactor.core.publisher.Mono;
+
 public interface ApplicationProcessor {
 
-    OfferDTO process(ApplicationData request);
+    Mono<OfferDTO> process(ApplicationDTO request);
 }
