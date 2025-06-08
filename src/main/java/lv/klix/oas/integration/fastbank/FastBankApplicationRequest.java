@@ -1,4 +1,4 @@
-package lv.klix.oas.service.processor.fastbank;
+package lv.klix.oas.integration.fastbank;
 
 import lombok.Data;
 

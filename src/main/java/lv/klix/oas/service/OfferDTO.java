@@ -1,4 +1,4 @@
-package lv.klix.oas.service.processor;
+package lv.klix.oas.service;
 
 import lombok.Data;
 

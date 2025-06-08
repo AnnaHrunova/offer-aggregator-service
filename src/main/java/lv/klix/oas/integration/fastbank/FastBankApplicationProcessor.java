@@ -1,10 +1,10 @@
-package lv.klix.oas.service.processor.fastbank;
+package lv.klix.oas.integration.fastbank;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lv.klix.oas.service.processor.ApplicationDTO;
-import lv.klix.oas.service.processor.ApplicationProcessor;
-import lv.klix.oas.service.processor.OfferDTO;
+import lv.klix.oas.integration.ApplicationProcessor;
+import lv.klix.oas.service.ApplicationDTO;
+import lv.klix.oas.service.OfferDTO;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

@@ -1,8 +1,8 @@
-package lv.klix.oas.service.processor.solidbank;
+package lv.klix.oas.integration.solidbank;
 
-import lv.klix.oas.service.processor.ApplicationDTO;
-import lv.klix.oas.service.processor.ApplicationProcessor;
-import lv.klix.oas.service.processor.OfferDTO;
+import lv.klix.oas.integration.ApplicationProcessor;
+import lv.klix.oas.service.ApplicationDTO;
+import lv.klix.oas.service.OfferDTO;
 import reactor.core.publisher.Mono;
 
 public class SolidBankApplicationProcessor implements ApplicationProcessor {

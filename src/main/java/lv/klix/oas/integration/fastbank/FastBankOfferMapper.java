@@ -1,6 +1,6 @@
-package lv.klix.oas.service.processor.fastbank;
+package lv.klix.oas.integration.fastbank;
 
-import lv.klix.oas.service.processor.OfferDTO;
+import lv.klix.oas.service.OfferDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

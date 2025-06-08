@@ -1,5 +1,7 @@
-package lv.klix.oas.service.processor;
+package lv.klix.oas.integration;
 
+import lv.klix.oas.service.ApplicationDTO;
+import lv.klix.oas.service.OfferDTO;
 import reactor.core.publisher.Mono;
 
 public interface ApplicationProcessor {

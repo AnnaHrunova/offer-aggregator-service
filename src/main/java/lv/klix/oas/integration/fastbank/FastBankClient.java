@@ -1,4 +1,4 @@
-package lv.klix.oas.service.processor.fastbank;
+package lv.klix.oas.integration.fastbank;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
