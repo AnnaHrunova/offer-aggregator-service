@@ -13,3 +13,5 @@ api:
 logging:
   pattern:
     correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
+  level:
+    web: debug
