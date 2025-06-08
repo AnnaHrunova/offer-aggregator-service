@@ -21,14 +21,7 @@ public class FastBankApplicationProcessor implements ApplicationProcessor {
 
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {
-        var fastBankApplicationRequest = new FastBankApplicationRequest();
-        fastBankApplicationRequest.setEmail("test@mail.lv");
-        fastBankApplicationRequest.setPhoneNumber("+37126668899");
-        fastBankApplicationRequest.setAmount(BigDecimal.valueOf(1000));
-        fastBankApplicationRequest.setDependents(1);
-        fastBankApplicationRequest.setAgreeToDataSharing(true);
-        fastBankApplicationRequest.setMonthlyCreditLiabilities(BigDecimal.valueOf(100));
-        fastBankApplicationRequest.setMonthlyIncomeAmount(BigDecimal.valueOf(5000));
+        var fastBankApplicationRequest = fastBankOfferMapper.map(request);
         return fastBankClient.submitApplication(fastBankApplicationRequest)
                 .doOnNext(resp -> log.info("Submitted application: {}", resp))
                 .flatMap(resp ->

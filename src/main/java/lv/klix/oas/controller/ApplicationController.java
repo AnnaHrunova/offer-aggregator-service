@@ -1,5 +1,6 @@
 package lv.klix.oas.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lv.klix.oas.service.ApplicationAggregatorService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class ApplicationController {
     private final ApplicationAggregatorService applicationAggregatorService;
 
     @PostMapping
-    public Mono<ResponseEntity<OffersResponse>> createApplication(@RequestBody ApplicationRequest request) {
+    public Mono<ResponseEntity<OffersResponse>> createApplication(@RequestBody @Valid ApplicationRequest request) {
         return applicationAggregatorService.processApplication(request)
                 .collect(Collectors.toSet())
                 .map(offers -> ResponseEntity.ok(new OffersResponse(offers)));

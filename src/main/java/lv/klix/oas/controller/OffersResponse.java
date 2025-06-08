@@ -18,7 +18,7 @@ public class OffersResponse {
         private UUID id;
         private BigDecimal monthlyPaymentAmount;
         private BigDecimal totalRepaymentAmount;
-        private BigDecimal numberOfPayments;
+        private Integer numberOfPayments;
         private BigDecimal annualPercentageRate;
         private LocalDate firstRepaymentDate;
     }

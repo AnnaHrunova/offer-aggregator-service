@@ -2,4 +2,15 @@
 POST http://localhost:8080/api/v1/applications
 Content-Type: application/json
 
-{}
+{
+    "phone": "+37129999999",
+    "email":"test@mail.com",
+    "monthlyIncome": 5000,
+    "monthlyExpenses":2000,
+    "monthlyCreditLiabilities": 0,
+    "dependents": 0,
+    "isCheckedConsent": true,
+    "maritalStatus": "SINGLE"
+}
+
+
