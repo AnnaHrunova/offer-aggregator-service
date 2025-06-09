@@ -29,8 +29,8 @@ public class ApplicationAggregatorService {
                 Flux.fromIterable(applicationProcessors)
                     .flatMap(processor -> processor.process(application)
                         .onErrorResume(e -> Mono.empty()))
-                    .flatMap(o ->
-                            Mono.fromCallable(() -> storeApplicationOffer(applicationId, o))
+                    .flatMap(offer ->
+                            Mono.fromCallable(() -> storeApplicationOffer(applicationId, offer))
                             .subscribeOn(Schedulers.boundedElastic()))
             );
     }

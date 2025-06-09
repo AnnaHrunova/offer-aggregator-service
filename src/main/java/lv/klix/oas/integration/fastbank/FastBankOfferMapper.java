@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface FastBankOfferMapper {
 
+    @Mapping(target = "financingInstitution", constant = "FastBank")
     OfferDTO map(FastBankApplicationResponse.FastBankOfferResponse fastBankOfferResponse);
 
     @Mapping(source = "phone", target = "phoneNumber")

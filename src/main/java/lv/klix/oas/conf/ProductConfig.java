@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-@ConfigurationProperties(prefix = "config")
+@ConfigurationProperties(prefix = "product-config")
 @Data
 public class ProductConfig {
     private Map<String, FinancingInstitutionProperties> financingInstitutions;

@@ -17,6 +17,7 @@ public class OffersResponse {
     public static class OfferResponse {
         private UUID id;
         private UUID applicationId;
+        private String financingInstitution;
         private BigDecimal monthlyPaymentAmount;
         private BigDecimal totalRepaymentAmount;
         private Integer numberOfPayments;

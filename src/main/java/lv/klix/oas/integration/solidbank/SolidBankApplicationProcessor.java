@@ -6,6 +6,7 @@ import lv.klix.oas.integration.ApplicationProcessor;
 import lv.klix.oas.service.ApplicationDTO;
 import lv.klix.oas.service.OfferDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -14,17 +15,17 @@ import java.time.Duration;
 @AllArgsConstructor
 @Slf4j
 public class SolidBankApplicationProcessor implements ApplicationProcessor {
-    private final SolidBankClient solidBankClient;
     private final SolidBankOfferMapper solidBankOfferMapper;
+    private final WebClient solidBankWebClient;
 
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {
 
         var solidBankApplicationRequest = solidBankOfferMapper.map(request);
-        return solidBankClient.submitApplication(solidBankApplicationRequest)
+        return submitApplication(solidBankApplicationRequest)
                 .doOnNext(resp -> log.info("Submitted application: {}", resp))
                 .flatMap(resp ->
-                        solidBankClient.findApplication(resp.getId())
+                        findApplication(resp.getId())
                                 .repeatWhen(flux -> flux.delayElements(Duration.ofSeconds(2)))
                                 .takeUntil(response -> response.getStatus() == SolidBankApplicationResponse.Status.PROCESSED)
                                 .doOnNext(response -> log.info("Polling response: {}", response))
@@ -32,6 +33,21 @@ public class SolidBankApplicationProcessor implements ApplicationProcessor {
                 )
                 .map(applResp -> solidBankOfferMapper.map(applResp.getOffer()))
                 .doOnError(err -> log.error("Error during application processing: {}", err.getMessage(), err));
+    }
+
+    public Mono<SolidBankApplicationResponse> submitApplication(SolidBankApplicationRequest request) {
+        return solidBankWebClient.post()
+                .uri("/applications")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(SolidBankApplicationResponse.class);
+    }
+
+    public Mono<SolidBankApplicationResponse> findApplication(String applicationId) {
+        return solidBankWebClient.get()
+                .uri("/applications/" + applicationId)
+                .retrieve()
+                .bodyToMono(SolidBankApplicationResponse.class);
     }
 }
 
