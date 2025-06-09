@@ -15,3 +15,12 @@ logging:
     correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
   level:
     web: debug
+
+product-config:
+  financing-institutions:
+    fastbank:
+        enabled: true
+        url: https://shop.stage.klix.app/api/FastBank
+    solidbank:
+        enabled: true
+        url: https://shop.stage.klix.app/api/SolidBank

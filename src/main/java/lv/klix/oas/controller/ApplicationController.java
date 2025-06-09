@@ -20,7 +20,7 @@ public class ApplicationController {
     private final ApplicationAggregatorService applicationAggregatorService;
 
     @PostMapping
-    public Mono<ResponseEntity<OffersResponse>> createApplication(@RequestBody @Valid ApplicationRequest request) {
+    public Mono<ResponseEntity<OffersResponse>> submitApplication(@RequestBody @Valid ApplicationRequest request) {
         return applicationAggregatorService.processApplication(request)
                 .collect(Collectors.toSet())
                 .map(offers -> ResponseEntity.ok(new OffersResponse(offers)));

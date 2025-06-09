@@ -39,6 +39,7 @@ public class ApplicationAggregatorService {
         var savedOfferId = domainService.saveOffer(applicationId, offerDTO);
         var res = dtoMapper.map(offerDTO);
         res.setId(savedOfferId);
+        res.setApplicationId(applicationId);
         return res;
     }
 }

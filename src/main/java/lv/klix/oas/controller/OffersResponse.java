@@ -16,6 +16,7 @@ public class OffersResponse {
     @Data
     public static class OfferResponse {
         private UUID id;
+        private UUID applicationId;
         private BigDecimal monthlyPaymentAmount;
         private BigDecimal totalRepaymentAmount;
         private Integer numberOfPayments;

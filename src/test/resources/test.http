@@ -10,6 +10,7 @@ Content-Type: application/json
     "monthlyCreditLiabilities": 0,
     "dependents": 0,
     "isCheckedConsent": true,
+    "amount": 2000.00,
     "maritalStatus": "SINGLE"
 }
 
