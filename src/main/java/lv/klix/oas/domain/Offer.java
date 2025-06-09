@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-public class Offer {
+public class Offer extends BaseEntity {
 
     @Id
     @UuidGenerator
@@ -19,4 +21,16 @@ public class Offer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", referencedColumnName = "id")
     private Application application;
+
+    private String financingInstitution;
+
+    private BigDecimal monthlyPaymentAmount;
+
+    private BigDecimal totalRepaymentAmount;
+
+    private BigDecimal numberOfPayments;
+
+    private BigDecimal annualPercentageRate;
+
+    private LocalDate firstRepaymentDate;
 }
