@@ -3,6 +3,7 @@ package lv.klix.oas.service;
 import lombok.AllArgsConstructor;
 import lv.klix.oas.controller.ApplicationRequest;
 import lv.klix.oas.controller.OffersResponse;
+import lv.klix.oas.controller.SelectOfferRequest;
 import lv.klix.oas.integration.ApplicationProcessor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -33,6 +34,13 @@ public class ApplicationAggregatorService {
                             Mono.fromCallable(() -> storeApplicationOffer(applicationId, offer))
                             .subscribeOn(Schedulers.boundedElastic()))
             );
+    }
+
+    public Mono<Void> selectOffer(SelectOfferRequest request) {
+        return Mono.fromRunnable(() ->
+                    domainService.selectOffer(request.getId(), request.getApplicationId()))
+                .subscribeOn(Schedulers.boundedElastic())
+                .then();
     }
 
     private OffersResponse.OfferResponse storeApplicationOffer(UUID applicationId, OfferDTO offerDTO) {

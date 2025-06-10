@@ -17,6 +17,22 @@ Content-Type: application/json
     client.test("Status is 200", function() {
         client.assert(response.status === 200, "Expected status 200, got " + response.status);
     });
+    client.global.set("applicationId", response.body.offers[0].applicationId);
+    client.global.set("offerId", response.body.offers[0].id);
+%}
+
+### Select offer
+PATCH http://localhost:8080/api/v1/offers
+Content-Type: application/json
+
+{
+    "id": "{{offerId}}",
+    "applicationId":"{{applicationId}}"
+}
+> {%
+    client.test("Status is 200", function() {
+        client.assert(response.status === 200, "Expected status 200, got " + response.status);
+    });
 %}
 
 

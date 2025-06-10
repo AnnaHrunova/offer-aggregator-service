@@ -38,5 +38,8 @@ public class Application extends BaseEntity{
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationRequest.MaritalStatus maritalStatus;
+    private MaritalStatus maritalStatus;
+
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status;
 }

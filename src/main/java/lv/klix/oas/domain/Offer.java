@@ -33,4 +33,6 @@ public class Offer extends BaseEntity {
     private BigDecimal annualPercentageRate;
 
     private LocalDate firstRepaymentDate;
+
+    private Boolean isSelected;
 }

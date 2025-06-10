@@ -1,23 +1,28 @@
 package lv.klix.oas.service;
 
 import lombok.AllArgsConstructor;
-import lv.klix.oas.domain.Application;
-import lv.klix.oas.domain.ApplicationRepository;
-import lv.klix.oas.domain.Offer;
-import lv.klix.oas.domain.OfferRepository;
+import lombok.extern.slf4j.Slf4j;
+import lv.klix.oas.domain.*;
+import lv.klix.oas.exception.InvalidDataException;
+import lv.klix.oas.exception.InvalidOperationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class DomainService {
 
     private final ApplicationRepository applicationRepository;
     private final OfferRepository offerRepository;
 
+    @Transactional
     public UUID saveOffer(UUID applicationId, OfferDTO offerData) {
-        var application = applicationRepository.findById(applicationId).orElseThrow();
+        var application = applicationRepository
+                .findById(applicationId)
+                .orElseThrow(() -> new InvalidDataException(String.format("Application id=%s not found", applicationId)));
         var offer = new Offer();
         offer.setApplication(application);
         offer.setFinancingInstitution(offerData.getFinancingInstitution());
@@ -26,11 +31,15 @@ public class DomainService {
         offer.setNumberOfPayments(offerData.getNumberOfPayments());
         offer.setAnnualPercentageRate(offerData.getAnnualPercentageRate());
         offer.setFirstRepaymentDate(offerData.getFirstRepaymentDate());
-        return offerRepository.save(offer).getId();
+        var savedOffer = offerRepository.save(offer).getId();
+        application.setStatus(ApplicationStatus.PROCESSED);
+        applicationRepository.save(application);
+        return savedOffer;
     }
 
     public UUID createApplication(ApplicationDTO applicationData) {
         var application = new Application();
+        application.setStatus(ApplicationStatus.INIT);
         application.setPhone(applicationData.getPhone());
         application.setEmail(applicationData.getEmail());
         application.setMonthlyIncome(applicationData.getMonthlyIncome());
@@ -39,7 +48,23 @@ public class DomainService {
         application.setDependents(applicationData.getDependents());
         application.setIsCheckedConsent(applicationData.getIsCheckedConsent());
         application.setAmount(applicationData.getAmount());
-        application.setMaritalStatus(applicationData.getMaritalStatus());
+        application.setMaritalStatus(MaritalStatus.valueOf(applicationData.getMaritalStatus().name()));
         return applicationRepository.save(application).getId();
+    }
+
+    @Transactional
+    public void selectOffer(UUID offerId, UUID applicationId) {
+        var offer = offerRepository
+                .findByIdAndApplicationId(offerId, applicationId)
+                .orElseThrow(() -> new InvalidDataException(String.format("Offer id=%s for application id=%s not found", offerId, applicationId)));
+        var application = offer.getApplication();
+        if (application.getStatus() != ApplicationStatus.PROCESSED) {
+            log.warn("Application id={} in status={} is not available for offers selection", applicationId, application.getStatus());
+            throw new InvalidOperationException(String.format("Application id=%s in status=%s is not available for offers selection", applicationId, application.getStatus()));
+        }
+        offer.setIsSelected(true);
+        offerRepository.save(offer);
+        application.setStatus(ApplicationStatus.FINALIZED);
+        applicationRepository.save(application);
     }
 }
