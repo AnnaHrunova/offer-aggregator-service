@@ -1,7 +1,8 @@
 package lv.klix.oas.integration.solidbank;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.klix.oas.conf.ProductConfig;
 import lv.klix.oas.integration.ApplicationProcessor;
 import lv.klix.oas.service.ApplicationDTO;
 import lv.klix.oas.service.OfferDTO;
@@ -12,15 +13,35 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
-public class SolidBankApplicationProcessor implements ApplicationProcessor {
+public class SolidBankApplicationProcessor extends ApplicationProcessor {
+    public static final String NAME = "SolidBank";
+
     private final SolidBankOfferMapper solidBankOfferMapper;
     private final WebClient solidBankWebClient;
+    private final ProductConfig productConfig;
+
+    @Override
+    public boolean isApplicable(ApplicationDTO request) {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return productConfig
+                .getFinancingInstitutions()
+                .get(NAME)
+                .isEnabled();
+    }
+
+    @Override
+    public String name() {
+        return NAME;
+    }
 
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {
-
         var solidBankApplicationRequest = solidBankOfferMapper.map(request);
         return submitApplication(solidBankApplicationRequest)
                 .doOnNext(resp -> log.info("Submitted application: {}", resp))

@@ -2,6 +2,8 @@ package lv.klix.oas.conf;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.klix.oas.integration.fastbank.FastBankApplicationProcessor;
+import lv.klix.oas.integration.solidbank.SolidBankApplicationProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -21,14 +23,14 @@ public class WebClientConfig {
 
     @Bean
     public WebClient fastBankWebClient() {
-        var fastBankConfig = productConfig.getFinancingInstitutions().get("fastbank");
+        var fastBankConfig = productConfig.getFinancingInstitutions().get(FastBankApplicationProcessor.NAME);
         log.info("Building FastBank WebClient: {}", fastBankConfig.getUrl());
         return buildWebClient(fastBankConfig.getUrl());
     }
 
     @Bean
     public WebClient solidBankWebClient() {
-        var solidBankConfig = productConfig.getFinancingInstitutions().get("solidbank");
+        var solidBankConfig = productConfig.getFinancingInstitutions().get(SolidBankApplicationProcessor.NAME);
         log.info("Building SolidBank WebClient: {}", solidBankConfig.getUrl());
         return buildWebClient(solidBankConfig.getUrl());
     }

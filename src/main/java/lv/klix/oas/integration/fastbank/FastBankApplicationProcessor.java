@@ -1,10 +1,12 @@
 package lv.klix.oas.integration.fastbank;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.klix.oas.conf.ProductConfig;
 import lv.klix.oas.integration.ApplicationProcessor;
 import lv.klix.oas.service.ApplicationDTO;
 import lv.klix.oas.service.OfferDTO;
+import lv.klix.oas.service.validator.PhoneType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -12,12 +14,32 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
-public class FastBankApplicationProcessor implements ApplicationProcessor {
+public class FastBankApplicationProcessor extends ApplicationProcessor {
+    public static final String NAME = "FastBank";
 
     private final FastBankOfferMapper fastBankOfferMapper;
     private final WebClient fastBankWebClient;
+    private final ProductConfig productConfig;
+
+    @Override
+    public boolean isApplicable(ApplicationDTO request) {
+        return request.getPhone().matches(PhoneType.LATVIA.getRegex());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return productConfig
+                .getFinancingInstitutions()
+                .get(NAME)
+                .isEnabled();
+    }
+
+    @Override
+    public String name() {
+        return NAME;
+    }
 
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {

@@ -18,9 +18,9 @@ logging:
 
 product-config:
   financing-institutions:
-    fastbank:
+    FastBank:
         enabled: true
         url: https://shop.stage.klix.app/api/FastBank
-    solidbank:
+    SolidBank:
         enabled: true
         url: https://shop.stage.klix.app/api/SolidBank

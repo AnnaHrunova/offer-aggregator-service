@@ -3,6 +3,8 @@ package lv.klix.oas.controller;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lv.klix.oas.service.validator.Phone;
+import lv.klix.oas.service.validator.PhoneType;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
@@ -12,7 +14,7 @@ import java.math.BigDecimal;
 public class ApplicationRequest {
 
     @NotBlank
-    @Length(min = 12, max = 16)
+    @Phone({PhoneType.LATVIA, PhoneType.INTERNATIONAL})
     private String phone;
 
     @NotBlank
@@ -21,27 +23,35 @@ public class ApplicationRequest {
     private String email;
 
     @NotNull
-    @Min(0)
+    @DecimalMin(value = "0.00")
+    @DecimalMax(value = "1000000.00")
+    @Digits(integer = 7, fraction = 2)
     private BigDecimal monthlyIncome;
 
     @NotNull
-    @Min(0)
+    @DecimalMin(value = "0.00")
+    @DecimalMax(value = "1000000.00")
+    @Digits(integer = 7, fraction = 2)
     private BigDecimal monthlyExpenses;
 
     @NotNull
-    @Min(0)
+    @DecimalMin(value = "0.00")
+    @DecimalMax(value = "1000000.00")
+    @Digits(integer = 7, fraction = 2)
     private BigDecimal monthlyCreditLiabilities;
 
     @NotNull
     @Min(0)
+    @Max(100)
     private Integer dependents;
 
-    @NotNull
+    @AssertTrue(message = "You must accept the consent to proceed.")
     private Boolean isCheckedConsent;
 
     @NotNull
-    @Min(100)
-    @Max(500000)
+    @DecimalMin(value = "100.00")
+    @DecimalMax(value = "1000000.00")
+    @Digits(integer = 7, fraction = 2)
     private BigDecimal amount;
 
     @NotNull
