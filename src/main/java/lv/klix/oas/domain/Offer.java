@@ -28,7 +28,7 @@ public class Offer extends BaseEntity {
 
     private BigDecimal totalRepaymentAmount;
 
-    private BigDecimal numberOfPayments;
+    private Integer numberOfPayments;
 
     private BigDecimal annualPercentageRate;
 

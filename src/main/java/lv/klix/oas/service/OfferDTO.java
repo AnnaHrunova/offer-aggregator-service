@@ -10,7 +10,7 @@ public class OfferDTO {
     private String financingInstitution;
     private BigDecimal monthlyPaymentAmount;
     private BigDecimal totalRepaymentAmount;
-    private BigDecimal numberOfPayments;
+    private Integer numberOfPayments;
     private BigDecimal annualPercentageRate;
     private LocalDate firstRepaymentDate;
 }
