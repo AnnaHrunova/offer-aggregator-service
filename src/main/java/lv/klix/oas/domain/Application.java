@@ -25,6 +25,8 @@ public class Application extends BaseEntity{
 
     private String email;
 
+    private UUID clientReference;
+
     private BigDecimal monthlyIncome;
 
     private BigDecimal monthlyExpenses;

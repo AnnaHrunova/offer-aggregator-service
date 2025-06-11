@@ -6,7 +6,7 @@ import lv.klix.oas.conf.ProductConfig;
 import lv.klix.oas.integration.ApplicationProcessor;
 import lv.klix.oas.service.ApplicationDTO;
 import lv.klix.oas.service.OfferDTO;
-import lv.klix.oas.service.validator.PhoneType;
+import lv.klix.oas.validator.PhoneType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;

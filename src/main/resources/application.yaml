@@ -16,6 +16,9 @@ logging:
   level:
     web: debug
 
+aes:
+  secret: 1f7808138d114fbba8d38d31373d0667
+
 product-config:
   financing-institutions:
     FastBank:

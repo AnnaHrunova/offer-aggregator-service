@@ -3,8 +3,8 @@ package lv.klix.oas.controller;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lv.klix.oas.service.validator.Phone;
-import lv.klix.oas.service.validator.PhoneType;
+import lv.klix.oas.validator.Phone;
+import lv.klix.oas.validator.PhoneType;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;

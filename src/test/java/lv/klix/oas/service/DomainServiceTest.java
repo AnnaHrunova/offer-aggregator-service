@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DomainServiceTest {
 
     @Autowired
-    private DomainService domainService;
+    private DomainService subject;
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -37,31 +37,35 @@ public class DomainServiceTest {
         var offer = prepareOffer(application);
         var offerId = offerRepository.save(offer).getId();
 
-        domainService.selectOffer(offerId, applicationId);
+        subject.selectOffer(offerId, applicationId);
 
-        var updatedOffer = offerRepository.findById(offerId).orElseThrow();
-        var updatedApp = applicationRepository.findById(applicationId).orElseThrow();
+        var selectedOffer = offerRepository.findById(offerId).orElseThrow();
+        var remainingOffersUnselected = offerRepository.findByApplicationIdAndIdNot(applicationId, offerId)
+                .stream()
+                .noneMatch(Offer::getIsSelected);
+        var finalizedApplication = applicationRepository.findById(applicationId).orElseThrow();
 
-        assertTrue(updatedOffer.getIsSelected());
-        assertEquals(ApplicationStatus.FINALIZED, updatedApp.getStatus());
+        assertTrue(selectedOffer.getIsSelected());
+        assertTrue(remainingOffersUnselected);
+        assertEquals(ApplicationStatus.FINALIZED, finalizedApplication.getStatus());
     }
 
     @Test
-    void shouldThrowIfOfferNotFound() {
+    void shouldThrowExceptionIfOfferNotFound() {
         var application = prepareValidApplication(ApplicationStatus.PROCESSED);
         var applicationId = applicationRepository.save(application).getId();
 
         var fakeOfferId = UUID.randomUUID();
         var ex = assertThrows(
                 InvalidDataException.class,
-                () -> domainService.selectOffer(fakeOfferId, applicationId)
+                () -> subject.selectOffer(fakeOfferId, applicationId)
         );
 
         assertEquals(String.format("Offer id=%s for application id=%s not found", fakeOfferId, applicationId), ex.getMessage());
     }
 
     @Test
-    void shouldThrowIfApplicationStatusNotProcessed() {
+    void shouldThrowExceptionIfApplicationStatusNotProcessed() {
         var finalizedApplication = prepareValidApplication(ApplicationStatus.FINALIZED);
         var finalizedApplicationId = applicationRepository.save(finalizedApplication).getId();
 
@@ -70,7 +74,7 @@ public class DomainServiceTest {
 
         InvalidOperationException ex = assertThrows(
                 InvalidOperationException.class,
-                () -> domainService.selectOffer(offerId, finalizedApplication.getId())
+                () -> subject.selectOffer(offerId, finalizedApplication.getId())
         );
 
         assertEquals(String.format("Application id=%s in status=%s is not available for offers selection", finalizedApplicationId, ApplicationStatus.FINALIZED), ex.getMessage());
@@ -78,9 +82,10 @@ public class DomainServiceTest {
 
     private static Application prepareValidApplication(ApplicationStatus status) {
         var application = new Application();
+        application.setClientReference(UUID.randomUUID());
         application.setStatus(status);
-        application.setPhone("+37123456789");
-        application.setEmail("email999@email.com");
+        application.setPhone(UUID.randomUUID().toString().substring(0, 10));
+        application.setEmail(UUID.randomUUID() + "@email.com");
         application.setMonthlyIncome(new BigDecimal("50000.00"));
         application.setMonthlyExpenses(new BigDecimal("1000.00"));
         application.setMonthlyCreditLiabilities(BigDecimal.ZERO);

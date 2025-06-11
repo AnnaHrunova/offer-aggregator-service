@@ -17,6 +17,7 @@ public class DomainService {
 
     private final ApplicationRepository applicationRepository;
     private final OfferRepository offerRepository;
+    private final AesEncryptionService aesEncryptionService;
 
     @Transactional
     public UUID saveOffer(UUID applicationId, OfferDTO offerData) {
@@ -38,10 +39,14 @@ public class DomainService {
     }
 
     public UUID createApplication(ApplicationDTO applicationData) {
+        var clientReference = UUID.randomUUID();
         var application = new Application();
+        application.setClientReference(clientReference);
+
+        application.setPhone(aesEncryptionService.encrypt(applicationData.getPhone(), clientReference.toString()));
+        application.setEmail(aesEncryptionService.encrypt(applicationData.getEmail(), clientReference.toString()));
+
         application.setStatus(ApplicationStatus.INIT);
-        application.setPhone(applicationData.getPhone());
-        application.setEmail(applicationData.getEmail());
         application.setMonthlyIncome(applicationData.getMonthlyIncome());
         application.setMonthlyExpenses(applicationData.getMonthlyExpenses());
         application.setMonthlyCreditLiabilities(applicationData.getMonthlyCreditLiabilities());
@@ -64,6 +69,13 @@ public class DomainService {
         }
         offer.setIsSelected(true);
         offerRepository.save(offer);
+
+        offerRepository.findByApplicationIdAndIdNot(applicationId, offerId)
+                        .forEach(o -> {
+                            o.setIsSelected(false);
+                            offerRepository.save(o);
+                        });
+
         application.setStatus(ApplicationStatus.FINALIZED);
         applicationRepository.save(application);
     }

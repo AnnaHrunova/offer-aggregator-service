@@ -1,4 +1,4 @@
-package lv.klix.oas.service.validator;
+package lv.klix.oas.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

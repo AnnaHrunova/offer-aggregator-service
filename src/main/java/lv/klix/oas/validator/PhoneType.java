@@ -1,4 +1,4 @@
-package lv.klix.oas.service.validator;
+package lv.klix.oas.validator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
