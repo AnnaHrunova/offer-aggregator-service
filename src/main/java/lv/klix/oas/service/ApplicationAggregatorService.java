@@ -1,5 +1,6 @@
 package lv.klix.oas.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lv.klix.oas.controller.ApplicationRequest;
 import lv.klix.oas.controller.OffersResponse;
@@ -21,6 +22,12 @@ public class ApplicationAggregatorService {
     private final DomainService domainService;
     private final List<ApplicationProcessor> applicationProcessors;
     private final DtoMapper dtoMapper;
+
+    @PostConstruct
+    void setup() {
+        applicationProcessors
+                .removeIf(processor -> !processor.isEnabled());
+    }
 
     public Flux<OffersResponse.OfferResponse> processApplication(ApplicationRequest request) {
         var application = dtoMapper.map(request);

@@ -54,3 +54,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('localDevRun', JavaExec) {
+	classpath = sourceSets.test.runtimeClasspath
+	main = "lv.klix.oas.LocalDevApplication"
+}
