@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lv.klix.oas.controller.ApplicationRequest;
 import lv.klix.oas.controller.OffersResponse;
 import lv.klix.oas.controller.SelectOfferRequest;
+import lv.klix.oas.domain.ApplicationStatus;
 import lv.klix.oas.integration.ApplicationProcessor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

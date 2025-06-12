@@ -14,4 +14,17 @@ public class FastBankApplicationRequest {
     private Integer dependents;
     private boolean agreeToDataSharing;
     private BigDecimal amount;
+
+    @Override
+    public String toString() {
+        return "FastBankApplicationRequest{" +
+                "phoneNumber=*****" +
+                ", email=*****" +
+                ", monthlyIncomeAmount=" + monthlyIncomeAmount +
+                ", monthlyCreditLiabilities=" + monthlyCreditLiabilities +
+                ", dependents=" + dependents +
+                ", agreeToDataSharing=" + agreeToDataSharing +
+                ", amount=" + amount +
+                '}';
+    }
 }

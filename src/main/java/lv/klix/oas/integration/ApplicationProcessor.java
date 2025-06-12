@@ -22,6 +22,11 @@ public abstract class ApplicationProcessor {
         return isEnabled;
     }
 
+    /**
+     * Process application by financing institution only if application data is suitable.
+     * For example, SolidBank can process applications with international phone numbers, but
+     * FastBank Latvian phone numbers only.
+    **/
     public Mono<OfferDTO> apply(ApplicationDTO request) {
         if (!isApplicable(request)) {
             log.info("Financing institution {} is not suitable for processing application for applicant's email = {}", name(), request.getEmail());

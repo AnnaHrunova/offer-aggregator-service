@@ -20,4 +20,17 @@ public class SolidBankApplicationRequest {
         DIVORCED,
         COHABITING
     }
+
+    @Override
+    public String toString() {
+        return "SolidBankApplicationRequest{" +
+                "phone=*****" +
+                ", email=*****" +
+                ", monthlyIncome=" + monthlyIncome +
+                ", monthlyExpenses=" + monthlyExpenses +
+                ", maritalStatus=" + maritalStatus +
+                ", agreeToBeScored=" + agreeToBeScored +
+                ", amount=" + amount +
+                '}';
+    }
 }

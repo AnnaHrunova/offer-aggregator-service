@@ -12,10 +12,15 @@ api:
   v1: api/v1
 logging:
   pattern:
-    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}] "
+    correlation: "[%X{traceId:-},%X{spanId:-}] "
   level:
-    web: debug
-
+#    web: debug
+    lv.klix.oas.integration: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, prometheus
 aes:
   secret: 1f7808138d114fbba8d38d31373d0667
 

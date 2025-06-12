@@ -11,15 +11,6 @@ public class SolidBankApplicationResponse {
     private Status status;
     private SolidBankOfferResponse offer;
 
-    @Override
-    public String toString() {
-        return "SolidBankApplicationResponse{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", offer=" + offer +
-                '}';
-    }
-
     @Data
     public static  class SolidBankOfferResponse {
 
@@ -33,5 +24,22 @@ public class SolidBankApplicationResponse {
     enum Status {
         DRAFT,
         PROCESSED
+    }
+
+    @Override
+    public String toString() {
+        var response = "SolidBankApplicationResponse {" +
+                "id=" + id +
+                ", status=" + status +
+                "%s" +
+                "}";
+
+        var offerString = offer == null ? "" : ", offer= {" +
+                "monthlyPaymentAmount=" + offer.monthlyPaymentAmount +
+                ", totalRepaymentAmount=" + offer.totalRepaymentAmount +
+                ", numberOfPayments=" + offer.numberOfPayments +
+                ", annualPercentageRate=" + offer.annualPercentageRate +
+                ", firstRepaymentDate=" + offer.firstRepaymentDate + "}";
+        return String.format(response, offerString);
     }
 }

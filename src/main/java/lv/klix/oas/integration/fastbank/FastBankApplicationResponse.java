@@ -12,15 +12,6 @@ public class FastBankApplicationResponse {
     private Status status;
     private FastBankOfferResponse offer;
 
-    @Override
-    public String toString() {
-        return "FastBankApplicationResponse{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", offer=" + offer +
-                '}';
-    }
-
     @Data
     public static  class FastBankOfferResponse {
 
@@ -34,5 +25,22 @@ public class FastBankApplicationResponse {
     enum Status {
         DRAFT,
         PROCESSED
+    }
+
+    @Override
+    public String toString() {
+        var response = "FastBankApplicationResponse {" +
+                "id=" + id +
+                ", status=" + status +
+                "%s" +
+                "}";
+
+        var offerString = offer == null ? "" : ", offer= {" +
+                    "monthlyPaymentAmount=" + offer.monthlyPaymentAmount +
+                    ", totalRepaymentAmount=" + offer.totalRepaymentAmount +
+                    ", numberOfPayments=" + offer.numberOfPayments +
+                    ", annualPercentageRate=" + offer.annualPercentageRate +
+                    ", firstRepaymentDate=" + offer.firstRepaymentDate + "}";
+        return String.format(response, offerString);
     }
 }

@@ -37,7 +37,7 @@ public class WebClientConfig {
 
     private WebClient buildWebClient(String url) {
         HttpClient httpClient = HttpClient.create()
-                .wiretap(true)
+                //.wiretap(true) //print WebClient request and response if DEBUG level enabled for web. Not supposed to be used on PRODUCTION
                 .responseTimeout(Duration.ofSeconds(1));
         return WebClient.builder()
                 .baseUrl(url)

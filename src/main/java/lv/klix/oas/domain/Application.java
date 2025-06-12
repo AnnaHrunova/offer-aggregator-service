@@ -6,7 +6,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import lv.klix.oas.controller.ApplicationRequest;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;

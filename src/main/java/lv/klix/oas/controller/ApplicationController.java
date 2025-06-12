@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lv.klix.oas.service.ApplicationAggregatorService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,6 +32,6 @@ public class ApplicationController {
     @PostMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Flux<OffersResponse.OfferResponse> submitApplicationStreamResult(@RequestBody @Valid ApplicationRequest request) {
         return applicationAggregatorService.processApplication(request)
-                .timeout(Duration.ofSeconds(30));
+                .timeout(Duration.ofSeconds(60));
     }
 }

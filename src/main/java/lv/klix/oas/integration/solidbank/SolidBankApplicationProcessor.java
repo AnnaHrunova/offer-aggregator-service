@@ -35,16 +35,22 @@ public class SolidBankApplicationProcessor extends ApplicationProcessor {
         return true;
     }
 
+    /**
+     Both financing institutions have similar logic in this case.
+     Some attempts were made to extract common parts, which resulted in decreased code readability.
+     Taking into account the fact that in real life integration providers differ, current implementation left as it is.
+     */
+
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {
         var solidBankApplicationRequest = solidBankOfferMapper.map(request);
         return submitApplication(solidBankApplicationRequest)
-                .doOnNext(resp -> log.info("Submitted application: {}", resp))
+                .doOnNext(resp -> log.debug("{} submit application response: {}", NAME, resp))
                 .flatMap(resp ->
                         findApplication(resp.getId())
                                 .repeatWhen(flux -> flux.delayElements(Duration.ofSeconds(2)))
                                 .takeUntil(response -> response.getStatus() == SolidBankApplicationResponse.Status.PROCESSED)
-                                .doOnNext(response -> log.info("Polling response: {}", response))
+                                .doOnNext(response -> log.debug("{} polling response: {}", NAME, response))
                                 .last()
                 )
                 .map(applResp -> solidBankOfferMapper.map(applResp.getOffer()))
@@ -52,6 +58,7 @@ public class SolidBankApplicationProcessor extends ApplicationProcessor {
     }
 
     public Mono<SolidBankApplicationResponse> submitApplication(SolidBankApplicationRequest request) {
+        log.debug("{} submit application request: {}", NAME, request);
         return solidBankWebClient.post()
                 .uri("/applications")
                 .bodyValue(request)

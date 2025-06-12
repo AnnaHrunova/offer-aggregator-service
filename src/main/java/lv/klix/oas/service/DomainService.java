@@ -32,6 +32,11 @@ public class DomainService {
         offer.setNumberOfPayments(offerData.getNumberOfPayments());
         offer.setAnnualPercentageRate(offerData.getAnnualPercentageRate());
         offer.setFirstRepaymentDate(offerData.getFirstRepaymentDate());
+
+        // In order to simplify application state transitions, an assumption is made
+        // that application is PROCESSED as soon as at least one offer is ready.
+        // Later application may be set to EXPIRED if no offers returned/all integrations unavailable/user left the page...
+        // Bad part: application state update is made with EACH offer, but this is not a heavy/risky operation
         var savedOffer = offerRepository.save(offer).getId();
         application.setStatus(ApplicationStatus.PROCESSED);
         applicationRepository.save(application);

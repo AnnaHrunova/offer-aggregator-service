@@ -36,15 +36,22 @@ public class FastBankApplicationProcessor extends ApplicationProcessor {
         return NAME;
     }
 
+
+    /**
+     Both financing institutions have similar logic in this case.
+     Some attempts were made to extract common parts, which resulted in decreased code readability.
+     Taking into account the fact that in real life integration providers differ, current implementation left as it is.
+     */
+
     @Override
     public Mono<OfferDTO> process(ApplicationDTO request) {
         var fastBankApplicationRequest = fastBankOfferMapper.map(request);
         return submitApplication(fastBankApplicationRequest)
-                .doOnNext(resp -> log.info("Submitted application: {}", resp))
+                .doOnNext(resp -> log.debug("{} submit application response: {}", NAME, resp))
                 .flatMap(resp -> findApplication(resp.getId())
                                 .repeatWhen(flux -> flux.delayElements(Duration.ofSeconds(2)))
                                 .takeUntil(response -> response.getStatus() == FastBankApplicationResponse.Status.PROCESSED)
-                                .doOnNext(response -> log.info("Polling response: {}", response))
+                                .doOnNext(response -> log.debug("{} polling response: {}", NAME, response))
                                 .last()
                 )
                 .map(applResp -> fastBankOfferMapper.map(applResp.getOffer()))
@@ -52,6 +59,7 @@ public class FastBankApplicationProcessor extends ApplicationProcessor {
     }
 
     private Mono<FastBankApplicationResponse> submitApplication(FastBankApplicationRequest request) {
+        log.debug("{} submit application request: {}", NAME, request);
         return fastBankWebClient.post()
                 .uri("/applications")
                 .bodyValue(request)

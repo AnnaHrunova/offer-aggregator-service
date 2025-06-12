@@ -3,7 +3,8 @@ package lv.klix.oas.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class PhoneValidator implements ConstraintValidator<Phone, String> {
