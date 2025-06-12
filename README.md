@@ -18,7 +18,6 @@ Docker engine 27.5.1
 
 
 Collection for testing API: [test.http](src/test/resources/test.http).
-()
 
 <h3>Short decision log</h3>
 
@@ -31,19 +30,19 @@ Collection for testing API: [test.http](src/test/resources/test.http).
 
 <h3>Out of scope</h3>
 
-<b>Production readiness<b>
+<b>Production readiness</b>
 * Monitoring
 * Authentication and authorization
 * Rate limiting (probably responsibility of API Gateway, but still)
 * Secret management
 
-<b>Cross-cutting concerns<b>
+<b>Cross-cutting concerns</b>
 * Common approach to avoid sensitive data in logs (masking patterns)
 * Common approach for logging or/and saving raw request and response from third party (if required)
 * Common approach for storing PII data (Vault)
 * Fallback options (some/all integrations are down)
 
-<b>Testing<b>
+<b>Testing</b>
 * Performance testing
 * Test coverage metrics
 
