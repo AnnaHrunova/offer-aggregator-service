@@ -5,12 +5,9 @@ Backend service for the financing application aggregator
 <h2>Installation and running</h2>
 
 <h3>Tools</h3>
-JDK 21  
-
-Gradle 8.14  
-
-Docker engine 27.5.1  
-
+JDK 21<br>
+Gradle 8.14<br>
+Docker engine 27.5.1<br>
 
 ```
 ./gradlew clean build
