@@ -1,15 +1,18 @@
 package lv.klix.oas.integration.fastbank;
 
 import lombok.Data;
+import lv.klix.oas.integration.ApplicationResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class FastBankApplicationResponse {
+public class FastBankApplicationResponse implements ApplicationResponse<FastBankApplicationResponse.FastBankOfferResponse> {
 
     private String id;
+
     private Status status;
+
     private FastBankOfferResponse offer;
 
     @Data
@@ -25,6 +28,16 @@ public class FastBankApplicationResponse {
     enum Status {
         DRAFT,
         PROCESSED
+    }
+
+    @Override
+    public FastBankOfferResponse getOffer() {
+        return offer;
+    }
+
+    @Override
+    public boolean isReady() {
+        return this.status == Status.PROCESSED;
     }
 
     @Override

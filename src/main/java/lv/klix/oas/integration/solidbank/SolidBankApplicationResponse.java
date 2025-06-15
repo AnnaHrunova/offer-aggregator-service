@@ -1,12 +1,14 @@
 package lv.klix.oas.integration.solidbank;
 
 import lombok.Data;
+import lv.klix.oas.integration.ApplicationResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class SolidBankApplicationResponse {
+public class SolidBankApplicationResponse implements ApplicationResponse<SolidBankApplicationResponse.SolidBankOfferResponse>
+{
     private String id;
     private Status status;
     private SolidBankOfferResponse offer;
@@ -24,6 +26,16 @@ public class SolidBankApplicationResponse {
     enum Status {
         DRAFT,
         PROCESSED
+    }
+
+    @Override
+    public boolean isReady() {
+        return this.status == Status.PROCESSED;
+    }
+
+    @Override
+    public SolidBankOfferResponse getOffer() {
+        return offer;
     }
 
     @Override
