@@ -7,11 +7,15 @@ import lv.klix.oas.service.ApplicationDTO;
 import lv.klix.oas.service.OfferDTO;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @AllArgsConstructor
 @Slf4j
-public abstract class ApplicationProcessor {
+public abstract class ApplicationProcessor <T, R extends ApplicationResponse<O>, O> {
 
     private final ProductConfig productConfig;
+    private final FinancingInstitutionWebClientWrapper<T, R> financingInstitutionWebClient;
+    private final ApplicationMapper<T, R, O> mapper;
 
     public boolean isEnabled() {
         var isEnabled = productConfig
@@ -37,7 +41,21 @@ public abstract class ApplicationProcessor {
         return process(request);
     }
 
-    public abstract Mono<OfferDTO> process(ApplicationDTO request);
+    public Mono<OfferDTO> process(ApplicationDTO request) {
+        T applicationRequest = mapper.mapToRequest(request);
+        return financingInstitutionWebClient.submitApplication(applicationRequest, "/applications")
+                .doOnNext(resp -> log.debug("{} submit application response: {}", name(), resp))
+                .flatMap(resp -> financingInstitutionWebClient.findApplication("/applications/" + resp.getId())
+                        .repeatWhen(flux -> flux.delayElements(Duration.ofSeconds(2)))
+                        .takeUntil(ApplicationResponse::isReady)
+                        .doOnNext(response -> log.debug("{} polling response: {}", name(), response))
+                        .last()
+                )
+                .map(r -> mapper.mapToOffer(r.getOffer()))
+                .doOnError(err -> log.error("Error during application processing: {}", err.getMessage(), err));
+    }
+
+
     public abstract boolean isApplicable(ApplicationDTO request);
     public abstract String name();
 }

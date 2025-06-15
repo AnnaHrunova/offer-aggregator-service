@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lv.klix.oas.controller.ApplicationRequest;
 import lv.klix.oas.controller.OffersResponse;
 import lv.klix.oas.controller.SelectOfferRequest;
-import lv.klix.oas.domain.ApplicationStatus;
 import lv.klix.oas.integration.ApplicationProcessor;
+import lv.klix.oas.integration.ApplicationResponse;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class ApplicationAggregatorService {
 
     private final DomainService domainService;
-    private final List<ApplicationProcessor> applicationProcessors;
+    private final List<ApplicationProcessor<?, ? extends ApplicationResponse<?>, ?>> applicationProcessors;
     private final DtoMapper dtoMapper;
 
     @PostConstruct
